@@ -1,4 +1,5 @@
 import AudioRecorder from "./AudioRecorder";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
 export default function Navbar() {
@@ -22,6 +23,9 @@ export default function Navbar() {
         >
           How to use
         </p>
+        <Link to="/goal-setting" className="hover:underline cursor-pointer">
+          Goal Setting
+        </Link>
       </div>
       <div className="ml-auto flex items-center">
         <AudioRecorder />
@@ -29,7 +33,9 @@ export default function Navbar() {
       {isDialogOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded-xl border-4 border-gray-300 shadow-lg text-black ">
-            <h2 className="text-xl font-semibold mb-4 text-center">How to use</h2>
+            <h2 className="text-xl font-semibold mb-4 text-center">
+              How to use
+            </h2>
             <p>
               <ul className="list-disc list-inside">
                 <li>
