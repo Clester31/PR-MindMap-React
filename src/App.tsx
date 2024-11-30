@@ -12,6 +12,8 @@ import Navbar from "./components/Navbar";
 import AssetAccordian from "./components/AssetAccordian";
 import EditAssetTextDisplay from "./components/EditAssetTextDisplay";
 import FullImageDisplay from "./components/FullImageDisplay";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import GoalSetting from "./components/GoalSetting";
 
 export default function App() {
   const {
@@ -25,12 +27,13 @@ export default function App() {
     setVideoPlayer,
     selectedValue,
     editTextDisplay,
-    fullImageDisplay
+    fullImageDisplay,
   } = useAppContext();
 
   const [newNodeDisplay, setNewNodeDisplay] = useState<boolean>(false);
   const [mediaDisplay, setMediaDisplay] = useState<boolean>(false);
-  const [imageSelectionDisplay, setImageSelectionDisplay] = useState<boolean>(false);
+  const [imageSelectionDisplay, setImageSelectionDisplay] =
+    useState<boolean>(false);
   const [mousePosition, setMousePosition] = useState<number[]>([0, 0]);
   // function for adding node onto the canvas
   const addNodeToCanvas = (
@@ -40,11 +43,9 @@ export default function App() {
     connectingNode: Node
   ) => {
     // createa a new node
-    if (nodeType === 'role' && nodeText?.length === 0) {
-      alert('cannot have empty text field')
+    if (nodeType === "role" && nodeText?.length === 0) {
+      alert("cannot have empty text field");
     } else {
-
-
       const newNode = {
         id: uuidv4(),
         position: { x: mousePosition[0], y: mousePosition[1] },
@@ -53,7 +54,7 @@ export default function App() {
         text: nodeText || "",
         image: "",
         video: "",
-        childNodes: []
+        childNodes: [],
       };
 
       // if its a role, then add the node into the role nodes
@@ -66,13 +67,13 @@ export default function App() {
       if (newNode.nodeType === "asset") {
         selectedValue.childNodes.map((role) => {
           if (role.id === connectingNode.id) {
-            role.childNodes.push(newNode)
+            role.childNodes.push(newNode);
           }
-        })
+        });
       }
       // hide new node display
       setNewNodeDisplay(false);
-      console.log("selected value", selectedValue)
+      console.log("selected value", selectedValue);
       // update the list of all nodes
       // setNodes((prev) => [...prev, newNode]);
     }
@@ -82,7 +83,7 @@ export default function App() {
   const getNodePosition = (e: React.MouseEvent<HTMLDivElement>) => {
     // mouse position has to be modified since by default it starts at the top left of the node instead of the center
     // offset it by half the the node size to get mouse clicks centered
-    setMousePosition([e.clientX - (110 / 2), e.clientY - (110 / 2)]);
+    setMousePosition([e.clientX - 110 / 2, e.clientY - 110 / 2]);
     setNewNodeDisplay(true);
   };
 
@@ -156,17 +157,19 @@ export default function App() {
 
   // removes a node from the array
   // still have to update this for asset nodes as well since removing a role node doesn't remove its asset nodes
-  const removeNode = (
-    node: Node
-  ) => {
+  const removeNode = (node: Node) => {
     //e.stopPropagation();
     console.log("click");
 
-    if (node.nodeType === 'role') {
-      selectedValue.childNodes = selectedValue.childNodes.filter(role => role.id !== node.id);
+    if (node.nodeType === "role") {
+      selectedValue.childNodes = selectedValue.childNodes.filter(
+        (role) => role.id !== node.id
+      );
     } else {
       selectedValue.childNodes.forEach((role) => {
-        role.childNodes = role.childNodes.filter(asset => asset.id !== node.id);
+        role.childNodes = role.childNodes.filter(
+          (asset) => asset.id !== node.id
+        );
       });
     }
 
@@ -184,9 +187,7 @@ export default function App() {
     <>
       <Navbar />
       <main className="flex">
-        {!fullImageDisplay && !videoPlayer &&
-          <AssetAccordian />
-        }
+        {!fullImageDisplay && !videoPlayer && <AssetAccordian />}
         <Canvas
           getNodePosition={getNodePosition}
           handleAddMedia={handleAddMedia}
@@ -238,14 +239,9 @@ export default function App() {
           </div>
         )}
         {videoPlayer && (
-          <VideoPlayer
-            video={video}
-            setVideoPlayer={setVideoPlayer}
-          />
+          <VideoPlayer video={video} setVideoPlayer={setVideoPlayer} />
         )}
-        {fullImageDisplay &&
-          <FullImageDisplay />
-        }
+        {fullImageDisplay && <FullImageDisplay />}
         {editTextDisplay && (
           <div
             className="media-display absolute rounded-xl w-1/3"
